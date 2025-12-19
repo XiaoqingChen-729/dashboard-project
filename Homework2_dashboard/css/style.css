@@ -1,0 +1,473 @@
+
+@font-face {
+  font-family: "CatsHandwriting";
+  src: url("../assets/fonts/CatsHandwriting.woff") format("woff");
+  font-display: swap;
+}
+
+/* ============ Overview ============ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "CatsHandwriting", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #f9f4ea;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.app-header {
+  background-image: url("../image/3.png");
+  background-size: 50%;        
+  background-position: right;  
+  background-repeat: no-repeat;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e0d4bd;
+}
+
+.title-handwriting {
+  margin: 0;
+  font-family: "CatsHandwriting", cursive;
+  font-size: 2rem;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 1.3rem;
+  opacity: 0.8;
+}
+
+.layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  height: auto; 
+  overflow: hidden; 
+}
+
+/* Map Area (Desktop) */
+#map {
+  flex: 1;
+  height: 100%;
+  min-height: 560px;
+  min-width: 0;
+  position: relative;
+  z-index: 0; 
+}
+
+.map-inline-popup .leaflet-popup-content-wrapper {
+  background: rgba(255, 252, 245, 0.92); /* 浅色半透明背景 */
+  border: 1px solid rgba(90, 47, 18, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 8px 10px;
+  min-width: 180px;
+  max-width: 260px;
+  color: #4c3b2a;
+  font-size: 1.2rem;
+}
+
+.map-inline-popup .leaflet-popup-content {
+  margin: 0;
+  min-width: 180px;
+  text-align: center;
+}
+
+.map-inline-popup .leaflet-popup-tip {
+  background: rgba(255, 252, 245, 0.96);
+}
+
+.map-info-title::before {
+  content: "📍";
+  margin-right: 4px;
+}
+
+.map-info-title {
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+}
+.map-info-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  display: block;
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    height: auto;
+    min-height: 0;
+  }
+
+  #map {
+    min-height: 420px;
+  }
+}
+
+/* Right Column (Desktop) */
+.sidebar {
+  width: 340px;
+  max-width: 40vw;
+  border-left: 1px solid #e0d4bd;
+  background-color: #fcf7ee;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; 
+  overflow-x: visible; 
+  min-width: 280px;
+  position: relative;
+  z-index: 2;
+  transition: width 0.3s ease, max-width 0.3s ease, min-width 0.3s ease;
+}
+
+.sidebar.sidebar-collapsed {
+  width: 0;
+  max-width: 0;
+  min-width: 0;
+  border-left: none;
+  overflow: visible;
+}
+
+.sidebar.sidebar-collapsed .panel {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-toggle-arrow {
+  position: absolute;
+  top: 50%;
+  left: -14px;                
+  transform: translateY(-50%);
+  width: 24px;
+  height: 48px;
+  border-radius: 24px 0 0 24px;
+  border: 1px solid #d0c2aa;
+  background: #fffaf0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  z-index: 10;             
+}
+
+.sidebar-toggle-arrow::before {
+  content: "《";
+  font-size: 16px;
+}
+
+.sidebar.sidebar-collapsed .sidebar-toggle-arrow::before {
+  content: "》";
+}
+
+.app-header {
+  position: relative;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  border: 1px solid #d0c2aa;
+  background: #fffaf0;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.sidebar-toggle:hover {
+  background: #f3e3c8;
+}
+
+.panel {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e6dbc8;
+}
+
+.filter-mode {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 6px 12px;
+}
+
+.filter-mode label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  font-size: 1.3rem;
+}
+
+.filter-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.search-input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #d0c2aa;
+}
+
+/* Park List (Desktop) */
+.park-list {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.park-card {
+  border-radius: 6px;
+  border: 1px solid #e1d2b9;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  background-color: #fffdf8;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.park-card:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.park-card.active {
+  border-color: #d0893b;
+  box-shadow: 0 0 0 2px rgba(208, 137, 59, 0.4);
+}
+
+.park-card-title {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.park-card-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.tag-list {
+  margin-top: 4px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 6px;
+  margin: 2px 4px 0 0;
+  border-radius: 999px;
+  background-color: #f2e5cf;
+  font-size: 1.1rem;
+}
+
+/* Detail Panel */
+.detail-panel p {
+  margin: 4px 0;
+  font-size: 1.2rem;
+}
+
+.storymap-btn {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: none;
+  background-color: #d0893b;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.storymap-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Bottom Bar */
+.legend-bar {
+  display: flex;
+  justify-content: center;
+  padding: 6px 12px;
+  background-color: #f3e6cf;
+  border-top: 1px solid #e0d4bd;
+  color: #5a4a3a;
+  font-size: 1.2rem;
+}
+
+/* 外层容器：保持 100% 宽度 */
+.legend {
+  width: 100%;
+}
+
+/* 内部容器：控制整体宽度和内边距 */
+.legend-inner {
+  max-width: 1660px;
+  margin: 0 auto;
+  padding: 3px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+}
+
+.legend-row-top .legend-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.legend-color {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legend-color-text {
+  white-space: nowrap;  
+  font-size: 1.3rem;
+}
+
+.legend-gradient {
+  width: 160px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #e8d9b8, #8c5a2e); 
+}
+
+.legend-scale-label {
+  font-size: 1.3rem;
+}
+
+.legend-row-bottom {
+  justify-content: center;
+}
+
+.legend-attribution {
+  font-size: 1.3rem;
+  color: #8a7a60;
+  text-align: center;
+}
+
+/* ================================================= */
+/* Medial Design (Mobile)            */
+/* ================================================= */
+
+.legend-title,
+.legend-color-text,
+.legend-attribution {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column; 
+    height: auto; 
+  }
+
+  #map {
+    width: 100%;
+    height: 40vh; 
+    min-height: 250px;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-width: 100%;
+    border-left: none;
+    overflow-y: visible; 
+  }
+
+  .park-list {
+    max-height: none; 
+    overflow-y: visible; 
+  }
+
+  .title-handwriting {
+    font-size: 2.2rem;
+  }
+
+  .legend-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 2px 4px;
+  }
+
+  .legend-inner {
+    padding: 2px 0 3px;
+  }
+}
+
+.leaflet-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.leaflet-pane,
+.leaflet-tile {
+  position: absolute;
+}
+
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  max-width: none;
+}
+
+/* ============ Leaflet 控件（版权 + 缩放按钮） ============ */
+
+/* 控件整体层级高一点，压在地图上方 */
+.leaflet-control-container {
+  position: relative;
+  z-index: 50;
+}
+
+/* 左上角缩放按钮美化 */
+.leaflet-control-zoom a {
+  background: rgba(255, 252, 245, 0.95);
+  border: 1px solid rgba(180, 150, 120, 0.4);
+  color: #6b5b4b;
+  width: 28px;
+  height: 28px;
+  line-height: 26px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 999px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.leaflet-control-zoom a:hover {
+  background: #f7e5cf;
+  color: #5a4b3c;
+}
+
+.leaflet-top.leaflet-left .leaflet-control-zoom {
+  margin-top: 12px;
+  margin-left: 10px;
+}

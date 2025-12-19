@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>East African Wildlife Tourism & Predator Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obc0O8mBY="
+    crossorigin=""
+  />
+
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1 class="title-handwriting">
+      The Great Migration & Wildlife Parks Dashboard
+    </h1>
+    <p class="subtitle">
+      Explore East Africa's famous national parks, tourism intensity, and basic information.
+    </p>
+  </header>
+
+  <main class="layout">
+    
+    <div id="map"></div>
+
+    <aside class="sidebar">
+      <button
+    id="toggleSidebar"
+    class="sidebar-toggle-arrow"
+    aria-label="Toggle sidebar"
+  ></button>
+      <section class="panel">
+        <h2>Filtering Options</h2>
+        <div class="filter-mode">
+          <label><input type="radio" name="filterMode" value="country" checked /> By Country</label>
+          <label><input type="radio" name="filterMode" value="park" /> By Park</label>
+          <label><input type="radio" name="filterMode" value="iucn" /> By IUCN</label>
+        </div>
+        <input
+          id="searchInput"
+          class="search-input"
+          type="text"
+          placeholder="Type your input here..."
+        />
+      </section>
+
+      <section class="panel park-list-panel">
+        <h2>Explore Park List</h2>
+        <div id="parkList" class="park-list">
+        </div>
+      </section>
+
+      <section class="panel detail-panel">
+        <h2>Park Detail</h2>
+        <div id="parkDetail">
+          <p>Select a park on the map or from the list.</p>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="legend-bar">
+    <div class="legend">
+      <div class="legend-inner">
+        <div class="legend-row legend-row-top">
+          <div class="legend-title">Legend</div>
+        </div>
+
+          <div class="legend-color">
+            <span class="legend-color-text">
+              Park Built Year ------
+            </span>
+            <span class="legend-scale-label">From Old</span>
+            <div class="legend-gradient"></div>
+            <span class="legend-scale-label">To New</span>
+          </div>
+        </div>
+
+        <div class="legend-row legend-row-bottom">
+          <div class="legend-attribution">
+            © OpenStreetMap contributors · style by HOT · tiles by OSM France · Powered by Leaflet
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <!-- 你的公园属性数据 -->
+  <script src="./js/parks-data.js"></script>
+  <!-- 主逻辑 -->
+  <script src="./js/main.js"></script>
+</body>
+</html>
